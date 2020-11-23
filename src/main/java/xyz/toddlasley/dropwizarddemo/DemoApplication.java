@@ -1,8 +1,10 @@
-package dropwizarddemo;
+package xyz.toddlasley.dropwizarddemo;
 
 import io.dropwizard.Application;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import xyz.toddlasley.dropwizarddemo.health.DemoHealthCheck;
+import xyz.toddlasley.dropwizarddemo.resources.DemoResource;
 
 public class DemoApplication extends Application<DemoConfiguration> {
 
@@ -23,7 +25,15 @@ public class DemoApplication extends Application<DemoConfiguration> {
     @Override
     public void run(final DemoConfiguration configuration,
                     final Environment environment) {
-        // TODO: implement application
+        final DemoResource resource = new DemoResource(
+                configuration.getTemplate(),
+                configuration.getDefaultName()
+        );
+
+        final DemoHealthCheck healthCheck =
+                new DemoHealthCheck(configuration.getTemplate());
+        environment.healthChecks().register("demo", healthCheck);
+        environment.jersey().register(resource);
     }
 
 }

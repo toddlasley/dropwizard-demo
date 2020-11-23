@@ -1,3 +1,6 @@
+template: What is good %s
+defaultName: Bill
+
 logging:
   level: INFO
   loggers:
